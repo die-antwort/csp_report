@@ -3,6 +3,7 @@ require_dependency "csp_report/application_controller"
 class CspReport::CspReportsController < ApplicationController
   # The browser submitting the report will not have any CSRF token
   skip_before_filter :verify_authenticity_token
+  before_filter :authenticate_admin!
   layout "csp_report/application"
 
   def index
