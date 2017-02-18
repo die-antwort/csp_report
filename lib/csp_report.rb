@@ -1,6 +1,6 @@
 require "csp_report/engine"
 require "lazy_high_charts"
-require "twitter-bootstrap-rails"
+require "bootstrap-sass"
 require "haml"
 
 module CspReport

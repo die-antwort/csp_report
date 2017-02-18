@@ -3,13 +3,14 @@ require_dependency "csp_report/application_controller"
 class CspReport::CspReportsController < ApplicationController
   # The browser submitting the report will not have any CSRF token
   skip_before_filter :verify_authenticity_token
+  layout "csp_report/application"
 
   def index
     @reports = CspReport::CspReport.all
   end
 
   def create
-    param = request.request_parameters()['csp-report']
+    param = JSON.parse(request.body.read)['csp-report']
     report = CspReport::CspReport.new do |r|
       r.document_uri = param['document-uri']
       r.referrer = param['referrer']
