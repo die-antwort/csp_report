@@ -24,7 +24,7 @@ class CspReport::CspReportsController < ApplicationController
   end
 
   def destroy
-    CspReport::CspReport.destroy(params[:id])
+    CspReport::CspReport.find(params[:id]).destroy
     redirect_to csp_reports_path
   end
 
@@ -34,8 +34,9 @@ class CspReport::CspReportsController < ApplicationController
   end
 
   def report_by_ip
-    @report_by_ip = CspReport::CspReport.select(
-      "incoming_ip, count(*) as count").group("incoming_ip")
+    @report_by_ip = CspReport::CspReport.pluck(:incoming_ip).group_by{ |ip| ip }.map{ |ip, reports| 
+      OpenStruct.new(incoming_ip: ip, count: reports.count) 
+    }
 
     data = []
     for report in @report_by_ip
@@ -79,8 +80,9 @@ class CspReport::CspReportsController < ApplicationController
   end
 
   def report_by_rule
-    @report_by_rule = CspReport::CspReport.select(
-      "violated_directive, count(*) as count").group("violated_directive")
+    @report_by_rule = CspReport::CspReport.pluck(:violated_directive).group_by{ |d| d }.map{ |d, reports| 
+      OpenStruct.new(violated_directive: d, count: reports.count) 
+    }
 
     data = []
     for report in @report_by_rule
@@ -124,8 +126,9 @@ class CspReport::CspReportsController < ApplicationController
   end
 
   def report_by_source
-    @report_by_source = CspReport::CspReport.select(
-      "document_uri, count(*) as count").group("document_uri")
+    @report_by_source = CspReport::CspReport.pluck(:document_uri).group_by{ |uri| uri }.map{ |uri, reports| 
+      OpenStruct.new(document_uri: uri, count: reports.count) 
+    }
 
     data = []
     for report in @report_by_source
