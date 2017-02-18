@@ -24,36 +24,26 @@
       %thead
         %tr.csp-report.report-row
           %th.csp-report.report-header
-            ID
-          %th.csp-report.report-header
-            Document URI
-          %th.csp-report.report-header
-            Referrer
-          %th.csp-report.report-header
-            Server Policy
-          %th.csp-report.report-header
             Violated Directive
           %th.csp-report.report-header
-            Blocked URI
+            Details
           %th.csp-report.report-header
-            Incoming IP
-          %th.csp-report.report-header
-            Reported At
+            IP / Date
           %th.csp-report.report-header
             Actions
       %tbody
       - @reports.each do |report|
         %tr.csp-report.report-row
-          %td.csp-report.report-cell=report.id
-          %td.csp-report.report-cell=report.document_uri
-          %td.csp-report.report-cell=report.referrer
-          %td.csp-report.report-cell=report.original_policy
           %td.csp-report.report-cell=report.violated_directive
-          %td.csp-report.report-cell=report.blocked_uri
-          %td.csp-report.report-cell=report.incoming_ip
-          %td.csp-report.report-cell=report.created_at
+          %td.csp-report.report-cell.uri
+            <strong>URI:</strong> #{report.document_uri}<br>
+            <strong>Referrer:</strong> #{report.referrer}<br>
+            <strong>Blocked:</strong> #{report.blocked_uri}<br>
+            <strong>Policy:</strong> #{report.original_policy}
+          %td.csp-report.report-cell.nowrap
+            #{report.incoming_ip}<br>#{l report.created_at, format: "%d.%m. %H:%M:%S"}
           %td.csp-report.report-cell
-            =link_to('Delete violation', csp_report_path(report.id), method: 'delete')
+            =link_to('Delete', csp_report_path(report.id), method: 'delete', class: "btn btn-danger btn-mini")
 
 .csp-report.row
   .csp-report
